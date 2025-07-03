@@ -1,0 +1,198 @@
+<mujoco model="ur5e_gripper">
+  <option iterations="50" timestep="0.001" solver="PGS" gravity="0 0 -9.81" />
+  <size njmax="2000" nconmax="1000"/>
+  <compiler angle="radian" meshdir="meshes" eulerseq="zyx" />
+
+  <default>
+    <joint limited="true" damping="0.01" armature="0.01" frictionloss="0.1" />
+    <geom condim="4" contype="1" conaffinity="15" friction="10.0 0.2 0.2" solref="0.002 1" solimp="0.95 0.95 0.01"/>
+    <motor ctrllimited="true" />
+    <equality solref="0.002 1" solimp="0.95 0.95 0.01"/>
+    <default class="visualgeom">
+      <geom material="visualgeom" condim="1" contype="0" conaffinity="0" />
+    </default>
+  </default>
+
+  <asset>
+    <mesh name="base" file="base.stl" />
+    <mesh name="shoulder" file="shoulder.stl" />
+    <mesh name="upperarm" file="upperarm.stl" />
+    <mesh name="forearm" file="forearm.stl" />
+    <mesh name="wrist1" file="wrist1.stl" />
+    <mesh name="wrist2" file="wrist2.stl" />
+    <mesh name="wrist3" file="wrist3.stl" />
+    <mesh name="robotiq_85_base_link" file="robotiq_85_base_link.stl" />
+    <mesh name="robotiq_85_knuckle_link" file="robotiq_85_knuckle_link.stl" />
+    <mesh name="robotiq_85_finger_link" file="robotiq_85_finger_link.stl" />
+    <mesh name="robotiq_85_inner_knuckle_link" file="robotiq_85_inner_knuckle_link.stl" />
+    <mesh name="robotiq_85_finger_tip_link" file="robotiq_85_finger_tip_link.stl" />
+    <texture name="texplane" type="2d" builtin="checker" rgb1=".0 .0 .0" rgb2=".8 .8 .8" width="100" height="100" />
+    <material name="matplane" reflectance="0." texture="texplane" texrepeat="1 1" texuniform="true" />
+    <material name="visualgeom" rgba="0.5 0.9 0.2 1" />
+  </asset>
+
+  <worldbody>
+    <light directional="true" diffuse="0.4 0.4 0.4" specular="0.1 0.1 0.1" pos="0 0 5.0" dir="0 0 -1" castshadow="false" />
+    <light directional="true" diffuse="0.6 0.6 0.6" specular="0.2 0.2 0.2" pos="0 0 4" dir="0 0 -1" />
+    <geom name="ground" type="plane" pos="0 0 0" size="100 100 0.001" quat="1 0 0 0" material="matplane" condim="3" conaffinity="15" />
+    <camera name="fixed" pos="-5 -0.3 0.4" xyaxes="1 0 0 0 0 1" />
+    <camera name="track" mode="trackcom" pos="0 -0.3 0.4" xyaxes="1 0 0 0 0 1" />
+
+    
+    <body name="root" pos="0 0 0.11472945581819244" quat="1 0 0 0">
+      <site name="imu" size="0.01" pos="0 0 0" />
+      <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="base" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+      <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="base" />
+      <body name="shoulder_link" pos="0 0 0.163">
+        <inertial pos="0 0 0" mass="3.7" diaginertia="0.0102675 0.0102675 0.00666" />
+        <joint name="shoulder_pan_joint" pos="0 0 0" axis="0 0 1" range="-6.28319 6.28319" />
+        <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="shoulder" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+        <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="shoulder" />
+        <body name="upper_arm_link" pos="0 0.138 0" quat="0.707107 0 0.707107 0">
+          <inertial pos="0 0 0.2125" mass="8.393" diaginertia="0.133886 0.133886 0.0151074" />
+          <joint name="shoulder_lift_joint" pos="0 0 0" axis="0 1 0" range="-6.28319 6.28319" />
+          <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="upperarm" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+          <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="upperarm" />
+          <body name="forearm_link" pos="0 -0.131 0.425">
+            <inertial pos="0 0 0.196" mass="2.275" diaginertia="0.0311796 0.0311796 0.004095" />
+            <joint name="elbow_joint" pos="0 0 0" axis="0 1 0" range="-3.14159 3.14159" />
+            <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="forearm" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+            <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="forearm" />
+            <body name="wrist_1_link" pos="0 0 0.392" quat="0.707107 0 0.707107 0">
+              <inertial pos="0 0.127 0" mass="1.219" diaginertia="0.0025599 0.0025599 0.0021942" />
+              <joint name="wrist_1_joint" pos="0 0 0" axis="0 1 0" range="-6.28319 6.28319" />
+              <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="wrist1" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+              <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="wrist1" />
+              <body name="wrist_2_link" pos="0 0.127 0">
+                <inertial pos="0 0 0.1" mass="1.219" diaginertia="0.0025599 0.0025599 0.0021942" />
+                <joint name="wrist_2_joint" pos="0 0 0" axis="0 0 1" range="-6.28319 6.28319" />
+                <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="wrist2" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="wrist2" />
+                <body name="wrist_3_link" pos="0 0 0.1">
+                  
+                  <inertial pos="0 0.0862937 0" quat="0.499999 0.500001 -0.499999 0.500001" mass="0.825851" diaginertia="0.00129048 0.00122948 0.000512134" />
+                  <joint name="wrist_3_joint" pos="0 0 0" axis="0 1 0" range="-6.28319 6.28319" />
+                  <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="wrist3" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                  <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="wrist3" />
+                  <site name="grasp_site" pos="0 0.11 0" size="0.005" type="sphere" rgba="0 1 0 1"/>
+		  <geom name="gripper_touch" type="box" size="0.02 0.01 0.02" pos="0 0.11 0" rgba="0 1 0 0.3" contype="1" conaffinity="1" group="3"/>
+                  <geom size="0.005 0.005 0.005" pos="0 0.09 0" quat="0.707107 0 0 0.707107" type="box" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                  <geom type="box" rgba="0.7 0.7 0.7 1" size="0.005 0.005 0.005" pos="0 0.09 0" quat="0.707107 0 0 0.707107" />
+                  <geom pos="0 0.089 0" quat="0.707105 0 0 0.707108" type="mesh" mesh="robotiq_85_base_link" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                  <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="robotiq_85_base_link" pos="0 0.089 0" quat="0.707105 0 0 0.707108" />
+                  
+                  <body name="robotiq_85_left_knuckle_link" pos="-0.0306013 0.143904 0" quat="0.000563087 0.707105 0.707108 0.000563089">
+                    <inertial pos="-0.00243606 -0.0187741 0" quat="0.647436 0.284299 -0.647436 0.284299" mass="0.0458" diaginertia="4.11145e-05 2.69913e-05 1.81232e-05" />
+                    <joint name="robotiq_85_left_knuckle_joint" pos="0 0 0" axis="0 0 1" range="0 0.80285" />
+                    <geom type="mesh" mesh="robotiq_85_knuckle_link" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                    <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="robotiq_85_knuckle_link" />
+                    <geom pos="-0.00408552 -0.031486 0" type="mesh" mesh="robotiq_85_finger_link" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                    <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="robotiq_85_finger_link" pos="-0.00408552 -0.031486 0" />
+                  </body>
+                  
+                  <body name="robotiq_85_right_knuckle_link" pos="0.0306009 0.143905 0" quat="0.707105 0 0 0.707108">
+                    <inertial pos="-0.00243606 -0.0187741 0" quat="0.647436 0.284299 -0.647436 0.284299" mass="0.0458" diaginertia="4.11145e-05 2.69913e-05 1.81232e-05" />
+                    <joint name="robotiq_85_right_knuckle_joint" pos="0 0 0" axis="0 0 1" range="-3.14 3.14" />
+                    <geom type="mesh" mesh="robotiq_85_knuckle_link" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                    <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="robotiq_85_knuckle_link" />
+                    <geom pos="-0.00408552 -0.031486 0" type="mesh" mesh="robotiq_85_finger_link" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                    <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="robotiq_85_finger_link" pos="-0.00408552 -0.031486 0" />
+                  </body>
+                  
+                  <body name="robotiq_85_left_inner_knuckle_link" pos="-0.0127002 0.15042 0" quat="0.000563087 0.707105 0.707108 0.000563089">
+                    <inertial pos="0 0 0" quat="0.707107 0.707107 0 0" mass="0.029951" diaginertia="3.9e-05 3.5e-05 5e-06" />
+                    <joint name="robotiq_85_left_inner_knuckle_joint" pos="0 0 0" axis="0 0 1" range="-3.14 3.14" />
+                    <geom type="mesh" mesh="robotiq_85_inner_knuckle_link" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                    <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="robotiq_85_inner_knuckle_link" />
+                    <body name="robotiq_85_left_finger_tip_link" pos="0.0430396 -0.0375994 0">
+                      <inertial pos="0 0 0" quat="0 0.707107 0 0.707107" mass="0.019555" diaginertia="6e-06 5e-06 2e-06" />
+                      <joint name="robotiq_85_left_finger_tip_joint" pos="0 0 0" axis="0 0 1" range="-3.14 3.14" />
+                      <geom type="mesh" mesh="robotiq_85_finger_tip_link" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                      <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="robotiq_85_finger_tip_link" />
+                    </body>
+                  </body>
+                  
+                  <body name="robotiq_85_right_inner_knuckle_link" pos="0.0126998 0.15042 0" quat="0.707105 0 0 0.707108">
+                    <inertial pos="0 0 0" quat="0.707107 0.707107 0 0" mass="0.029951" diaginertia="3.9e-05 3.5e-05 5e-06" />
+                    <joint name="robotiq_85_right_inner_knuckle_joint" pos="0 0 0" axis="0 0 1" range="-3.14 3.14" />
+                    <geom type="mesh" mesh="robotiq_85_inner_knuckle_link" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                    <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="robotiq_85_inner_knuckle_link" />
+                    <body name="robotiq_85_right_finger_tip_link" pos="0.0430396 -0.0375994 0">
+                      <inertial pos="0 0 0" quat="0 0.707107 0 0.707107" mass="0.019555" diaginertia="6e-06 5e-06 2e-06" />
+                      <joint name="robotiq_85_right_finger_tip_joint" pos="0 0 0" axis="0 0 1" range="-3.14 3.14" />
+                      <geom type="mesh" mesh="robotiq_85_finger_tip_link" contype="1" conaffinity="0" density="0" group="1" class="visualgeom" />
+                      <geom type="mesh" rgba="0.7 0.7 0.7 1" mesh="robotiq_85_finger_tip_link" />
+                    </body>
+                  </body>
+                  
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+    </body>
+    <body name="cube" pos="0.2 0.1 0.65">
+    <joint name="cube_joint" type="free" limited="false"/>
+    <geom name="cube_geom" type="box" size="0.05 0.05 0.05" rgba="1 0 0 1" mass="0.05" friction="10 1 0.1"/>
+  </body>
+  </worldbody>
+
+
+  <actuator>
+    <motor name="shoulder_pan_joint" joint="shoulder_pan_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+    <motor name="shoulder_lift_joint" joint="shoulder_lift_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+    <motor name="elbow_joint" joint="elbow_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+    <motor name="wrist_1_joint" joint="wrist_1_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+    <motor name="wrist_2_joint" joint="wrist_2_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+    <motor name="wrist_3_joint" joint="wrist_3_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+    <motor name="robotiq_85_left_knuckle_joint" joint="robotiq_85_left_knuckle_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+    <motor name="robotiq_85_right_knuckle_joint" joint="robotiq_85_right_knuckle_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+    <motor name="robotiq_85_left_inner_knuckle_joint" joint="robotiq_85_left_inner_knuckle_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+    <motor name="robotiq_85_left_finger_tip_joint" joint="robotiq_85_left_finger_tip_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+    <motor name="robotiq_85_right_inner_knuckle_joint" joint="robotiq_85_right_inner_knuckle_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+    <motor name="robotiq_85_right_finger_tip_joint" joint="robotiq_85_right_finger_tip_joint" ctrllimited="true" ctrlrange="-1 1" gear="1" />
+  </actuator>
+
+  <sensor>
+    <actuatorpos name="shoulder_pan_joint_p" actuator="shoulder_pan_joint" />
+    <actuatorvel name="shoulder_pan_joint_v" actuator="shoulder_pan_joint" />
+    <actuatorfrc name="shoulder_pan_joint_f" actuator="shoulder_pan_joint" noise="0.001" />
+    <actuatorpos name="shoulder_lift_joint_p" actuator="shoulder_lift_joint" />
+    <actuatorvel name="shoulder_lift_joint_v" actuator="shoulder_lift_joint" />
+    <actuatorfrc name="shoulder_lift_joint_f" actuator="shoulder_lift_joint" noise="0.001" />
+    <actuatorpos name="elbow_joint_p" actuator="elbow_joint" />
+    <actuatorvel name="elbow_joint_v" actuator="elbow_joint" />
+    <actuatorfrc name="elbow_joint_f" actuator="elbow_joint" noise="0.001" />
+    <actuatorpos name="wrist_1_joint_p" actuator="wrist_1_joint" />
+    <actuatorvel name="wrist_1_joint_v" actuator="wrist_1_joint" />
+    <actuatorfrc name="wrist_1_joint_f" actuator="wrist_1_joint" noise="0.001" />
+    <actuatorpos name="wrist_2_joint_p" actuator="wrist_2_joint" />
+    <actuatorvel name="wrist_2_joint_v" actuator="wrist_2_joint" />
+    <actuatorfrc name="wrist_2_joint_f" actuator="wrist_2_joint" noise="0.001" />
+    <actuatorpos name="wrist_3_joint_p" actuator="wrist_3_joint" />
+    <actuatorvel name="wrist_3_joint_v" actuator="wrist_3_joint" />
+    <actuatorfrc name="wrist_3_joint_f" actuator="wrist_3_joint" noise="0.001" />
+    <actuatorpos name="robotiq_85_left_knuckle_joint_p" actuator="robotiq_85_left_knuckle_joint" />
+    <actuatorvel name="robotiq_85_left_knuckle_joint_v" actuator="robotiq_85_left_knuckle_joint" />
+    <actuatorfrc name="robotiq_85_left_knuckle_joint_f" actuator="robotiq_85_left_knuckle_joint" noise="0.001" />
+    <actuatorpos name="robotiq_85_right_knuckle_joint_p" actuator="robotiq_85_right_knuckle_joint" />
+    <actuatorvel name="robotiq_85_right_knuckle_joint_v" actuator="robotiq_85_right_knuckle_joint" />
+    <actuatorfrc name="robotiq_85_right_knuckle_joint_f" actuator="robotiq_85_right_knuckle_joint" noise="0.001" />
+    <actuatorpos name="robotiq_85_left_inner_knuckle_joint_p" actuator="robotiq_85_left_inner_knuckle_joint" />
+    <actuatorvel name="robotiq_85_left_inner_knuckle_joint_v" actuator="robotiq_85_left_inner_knuckle_joint" />
+    <actuatorfrc name="robotiq_85_left_inner_knuckle_joint_f" actuator="robotiq_85_left_inner_knuckle_joint" noise="0.001" />
+    <actuatorpos name="robotiq_85_left_finger_tip_joint_p" actuator="robotiq_85_left_finger_tip_joint" />
+    <actuatorvel name="robotiq_85_left_finger_tip_joint_v" actuator="robotiq_85_left_finger_tip_joint" />
+    <actuatorfrc name="robotiq_85_left_finger_tip_joint_f" actuator="robotiq_85_left_finger_tip_joint" noise="0.001" />
+    <actuatorpos name="robotiq_85_right_inner_knuckle_joint_p" actuator="robotiq_85_right_inner_knuckle_joint" />
+    <actuatorvel name="robotiq_85_right_inner_knuckle_joint_v" actuator="robotiq_85_right_inner_knuckle_joint" />
+    <actuatorfrc name="robotiq_85_right_inner_knuckle_joint_f" actuator="robotiq_85_right_inner_knuckle_joint" noise="0.001" />
+    <actuatorpos name="robotiq_85_right_finger_tip_joint_p" actuator="robotiq_85_right_finger_tip_joint" />
+    <actuatorvel name="robotiq_85_right_finger_tip_joint_v" actuator="robotiq_85_right_finger_tip_joint" />
+    <actuatorfrc name="robotiq_85_right_finger_tip_joint_f" actuator="robotiq_85_right_finger_tip_joint" noise="0.001" />
+    <framequat name="orientation" objtype="site" noise="0.001" objname="imu" />
+    <gyro name="angular-velocity" site="imu" noise="0.005" cutoff="34.9" />
+  </sensor>
+
+</mujoco>
